@@ -1,4 +1,8 @@
 import httpx
+from app.utils.weather_utils import (
+    get_weather_condition,
+    generate_advice,
+)
 
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
@@ -40,11 +44,23 @@ async def get_weather(city: str):
 
         current = weather_data["current"]
 
+        condition = get_weather_condition(current["weather_code"])
+
+        advice = generate_advice(
+            condition,
+            current["temperature_2m"]
+        )
+
         return {
-            "city": location["name"],
-            "country": location["country"],
-            "temperature": current["temperature_2m"],
-            "humidity": current["relative_humidity_2m"],
-            "wind_speed": current["wind_speed_10m"],
-            "weather_code": current["weather_code"]
+            "location": {
+                "city": location["name"],
+                "country": location["country"]
+            },
+            "weather": {
+                "temperature": current["temperature_2m"],
+                "condition": condition,
+                "humidity": current["relative_humidity_2m"],
+                "wind_speed": current["wind_speed_10m"]
+            },
+            "advice": advice
         }
