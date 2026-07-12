@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
+class Measurement(BaseModel):
+    value: float
+    unit: str
 
 class Location(BaseModel):
     city: str
@@ -7,9 +10,9 @@ class Location(BaseModel):
 
 
 class Weather(BaseModel):
-    temperature: float
-    humidity: int
-    wind_speed: float
+    temperature: Measurement
+    humidity: Measurement
+    wind_speed: Measurement
     condition: str
 
 

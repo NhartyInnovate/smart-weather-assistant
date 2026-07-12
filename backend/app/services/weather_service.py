@@ -57,10 +57,19 @@ async def get_weather(city: str):
                 "country": location["country"]
             },
             "weather": {
-                "temperature": current["temperature_2m"],
-                "condition": condition,
-                "humidity": current["relative_humidity_2m"],
-                "wind_speed": current["wind_speed_10m"]
+                "temperature": {
+                    "value": current["temperature_2m"],
+                    "unit": "°C"
+                },
+                "humidity": {
+                    "value": current["relative_humidity_2m"],
+                    "unit": "%"
+                },
+                "wind_speed": {
+                    "value": current["wind_speed_10m"],
+                    "unit": "km/h"
+                },
+                "condition": condition
             },
             "advice": advice
         }
