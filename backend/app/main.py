@@ -4,7 +4,16 @@ from app.api.weather import router as weather_router
 
 app = FastAPI(
     title="Smart Weather Assistant API",
-    version="1.0.0"
+    description="""
+A simple REST API that provides current weather information
+for any supported city using the Open-Meteo API.
+
+Features:
+- Current weather
+- Smart weather advice
+- Clean JSON responses
+""",
+    version="1.0.0",
 )
 
 
