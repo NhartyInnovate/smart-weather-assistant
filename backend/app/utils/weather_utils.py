@@ -29,9 +29,21 @@ def generate_advice(condition: str, temperature: float) -> str:
 
     condition = condition.lower()
 
-    if "rain" in condition:
+    if any(word in condition for word in [
+        "rain",
+        "drizzle",
+        "shower"
+    ]):
         return "Carry an umbrella before going out."
-
+    if "snow" in condition:
+        return "Dress warmly and watch for slippery surfaces."
+    
+    if "fog" in condition:
+        return "Drive carefully and use your headlights if visibility is low."
+    
+    if "thunderstorm" in condition:
+        return "Avoid outdoor activities and seek shelter if storms become severe."
+    
     if "thunderstorm" in condition:
         return "Avoid outdoor activities if possible."
 

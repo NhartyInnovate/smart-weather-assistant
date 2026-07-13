@@ -3,6 +3,9 @@ from app.utils.weather_utils import (
     get_weather_condition,
     generate_advice,
 )
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 
 GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search"
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
@@ -27,6 +30,12 @@ async def get_weather(city: str):
 
         location = geo_data["results"][0]
 
+        timezone = location["timezone"]
+
+        local_time = datetime.now(
+            ZoneInfo(timezone)
+        ).isoformat(timespec="minutes")
+
         latitude = location["latitude"]
         longitude = location["longitude"]
 
@@ -36,7 +45,7 @@ async def get_weather(city: str):
             params={
                 "latitude": latitude,
                 "longitude": longitude,
-                "current": "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code"
+                "current": "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code,is_day"
             }
         )
 
@@ -54,22 +63,29 @@ async def get_weather(city: str):
         return {
             "location": {
                 "city": location["name"],
-                "country": location["country"]
+                "country": location["country"],
+                "timezone": timezone,
             },
             "weather": {
                 "temperature": {
                     "value": current["temperature_2m"],
-                    "unit": "°C"
+                    "unit": "°C",
                 },
                 "humidity": {
                     "value": current["relative_humidity_2m"],
-                    "unit": "%"
+                    "unit": "%",
                 },
                 "wind_speed": {
                     "value": current["wind_speed_10m"],
-                    "unit": "km/h"
+                    "unit": "km/h",
                 },
-                "condition": condition
+                "condition": condition,
+                "weather_code": current["weather_code"],
+                "is_day": bool(current["is_day"]),
             },
-            "advice": advice
+            "advice": advice,
+            "metadata": {
+                "local_time": local_time,
+                "last_updated": local_time,
+            },
         }
