@@ -23,8 +23,18 @@ class Weather(BaseModel):
 class Metadata(BaseModel):
     local_time: str
     last_updated: str
+
+
+class HourlyData(BaseModel):
+    time: str
+    temperature: float
+    condition: str
+    weather_code: int
+
+
 class WeatherResponse(BaseModel):
     location: Location
     weather: Weather
+    hourly: list[HourlyData]
     advice: str
     metadata: Metadata
